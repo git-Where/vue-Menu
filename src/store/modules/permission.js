@@ -9,6 +9,7 @@ const permission = {
   },
   mutations: {
     SET_ROUTERS: (state, routers) => {
+      console.log(routers + '路由')
       state.addRouters = routers
       state.routers = constantRouterMap.concat(routers)
     }
@@ -36,13 +37,21 @@ function generateRoutes(routes, basePath = '/') {
     if (route.hidden) { continue }
 
     let onlyOneChild = null
+debugger
+    let data = null
 
-    if (route.children && route.children.length === 1) {
+    if (route.children && route.children.length === 1) { // 只有一个子节点
       onlyOneChild = path.resolve(route.path, route.children[0].path)
     }
-    let data = null
+    let itemPath = null
+    console.log(wsCache.get('userInfo').roleAuth)
     for (const item of wsCache.get('userInfo').roleAuth) {
-      if (path.resolve(basePath, onlyOneChild || route.path) === item.path) {
+      if (item.child === 'true') {
+        itemPath = item.path
+      } else {
+        itemPath = item.path
+      }
+      if (path.resolve(basePath, onlyOneChild || route.path) === itemPath) { // 节点匹配
         data = Object.assign({}, route)
         if (data.meta) {
           data.meta.btnRoles = item.btnRoles || []

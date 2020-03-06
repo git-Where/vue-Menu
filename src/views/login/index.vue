@@ -114,12 +114,34 @@ export default {
             {
               path: '/nested/menu1',
               title: 'Menu1',
+              child: 'true',
               roles: ['edit', 'det'],
               btnRoles: ['edit', 'det']
+              // children: [
+              //   {
+              //     path: '/nested/menu1/menu1-1/index',
+              //     title: 'Menu1-1',
+              //     roles: ['edit', 'det'],
+              //     btnRoles: ['edit', 'det']
+              //   },
+              //   {
+              //     path: '/nested/menu1/menu1-2/index',
+              //     title: 'Menu1-2',
+              //     roles: ['edit', 'det'],
+              //     btnRoles: ['edit', 'det']
+              //   },
+              //   {
+              //     path: '/nested/menu1/menu1-3/index',
+              //     title: 'Menu1-3',
+              //     roles: ['edit', 'det'],
+              //     btnRoles: ['edit', 'det']
+              //   }
+              // ]
             },
             {
               path: '/nested/menu2',
               title: 'Menu2',
+              child: 'true',
               roles: ['edit', 'det'],
               btnRoles: ['edit', 'det']
             }
@@ -154,14 +176,13 @@ export default {
       this.$refs.loginForm.validate(valid => {
         if (valid) {
           this.loading = true
-          debugger
+          console.log(this.roleAuth)
           this.$wsCache.set('userInfo', { roleAuth: this.roleAuth })
           this.$store.dispatch('GenerateRoutes').then(() => {
-            debugger
-            // this.$router.push({ path: this.redirect || '/' })
+            // this.$router.push({ path: this.redirect || '/' }) // 后面开发记得打开
             this.$router.options.routes = this.$store.getters.routers
             this.$router.addRoutes(this.$store.getters.addRouters) // 动态添加可访问路由
-            this.$router.push({ path: path.resolve(this.$store.getters.addRouters[0].path,this.$store.getters.addRoutes[0].children[0].path) })
+            this.$router.push({ path: path.resolve(this.$store.getters.addRouters[0].path, this.$store.getters.addRoutes[0].children[0].path) })
             this.loading = false
           }).catch(() => {
             this.loading = false

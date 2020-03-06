@@ -15,6 +15,9 @@ import wsCache from './cache' // 本地存储
 
 import config from './config' // 引入全局配置
 
+import Directive from '@/directive'
+Directive(Vue)
+
 import '@/icons' // icon
 import '@/permission' // permission control
 
@@ -28,7 +31,7 @@ import '@/permission' // permission control
  */
 import { mockXHR } from '../mock'
 if (process.env.NODE_ENV === 'development') {
-  mockXHR()
+  // mockXHR()
 }
 
 // set ElementUI lang to EN
