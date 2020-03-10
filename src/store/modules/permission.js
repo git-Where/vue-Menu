@@ -37,7 +37,7 @@ function generateRoutes(routes, basePath = '/') {
     if (route.hidden) { continue }
 
     let onlyOneChild = null
-debugger
+
     let data = null
 
     if (route.children && route.children.length === 1) { // 只有一个子节点
@@ -46,11 +46,11 @@ debugger
     let itemPath = null
     console.log(wsCache.get('userInfo').roleAuth)
     for (const item of wsCache.get('userInfo').roleAuth) {
-      if (item.child === 'true') {
+      // if (item.child === 'true') {
+      //   itemPath = item.path
+      // } else {
         itemPath = item.path
-      } else {
-        itemPath = item.path
-      }
+      // }
       if (path.resolve(basePath, onlyOneChild || route.path) === itemPath) { // 节点匹配
         data = Object.assign({}, route)
         if (data.meta) {

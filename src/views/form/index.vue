@@ -44,11 +44,13 @@
         <el-button @click="onCancel">Cancel</el-button>
       </el-form-item>
     </el-form>
+    <table-item></table-item>
   </div>
 </template>
 
 <script>
 import { mapState, mapGetters, mapActions, mapMutations } from 'vuex'
+import tableItem from '@/components/table'
 export default {
   data() {
     return {
@@ -63,6 +65,9 @@ export default {
         desc: ''
       }
     }
+  },
+  components: {
+    tableItem
   },
   computed: {// 获取状态值放在计算属性的computed中(获取到的是所有store中的状态值)
     ...mapState([
