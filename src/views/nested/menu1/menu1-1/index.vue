@@ -5,3 +5,21 @@
     </el-alert>
   </div>
 </template>
+
+<script>
+
+export default {
+  name: "Menu1-1",
+  data() {
+    return {
+    }
+  },
+  created() {
+    console.log(this.$route)
+    console.log(this.$route.path)
+  },
+  methods: {
+  }
+}
+</script>
+

@@ -43,15 +43,9 @@ function generateRoutes(routes, basePath = '/') {
     if (route.children && route.children.length === 1) { // 只有一个子节点
       onlyOneChild = path.resolve(route.path, route.children[0].path)
     }
-    let itemPath = null
     console.log(wsCache.get('userInfo').roleAuth)
     for (const item of wsCache.get('userInfo').roleAuth) {
-      // if (item.child === 'true') {
-      //   itemPath = item.path
-      // } else {
-        itemPath = item.path
-      // }
-      if (path.resolve(basePath, onlyOneChild || route.path) === itemPath) { // 节点匹配
+      if (path.resolve(basePath, onlyOneChild || route.path) === item.path) { // 节点匹配
         data = Object.assign({}, route)
         if (data.meta) {
           data.meta.btnRoles = item.btnRoles || []

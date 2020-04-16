@@ -1,7 +1,13 @@
 <template>
   <div class="login-container">
-    <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form" auto-complete="on" label-position="left">
-
+    <el-form
+      ref="loginForm"
+      :model="loginForm"
+      :rules="loginRules"
+      class="login-form"
+      auto-complete="on"
+      label-position="left"
+    >
       <div class="title-container">
         <h3 class="title">Login Form</h3>
       </div>
@@ -41,119 +47,115 @@
         </span>
       </el-form-item>
 
-      <el-button :loading="loading" type="primary" style="width:100%;margin-bottom:30px;" @click.native.prevent="handleLogin">Login</el-button>
+      <el-button
+        :loading="loading"
+        type="primary"
+        style="width:100%;margin-bottom:30px;"
+        @click.native.prevent="handleLogin"
+      >Login</el-button>
 
       <div class="tips">
         <span style="margin-right:20px;">username: admin</span>
-        <span> password: any</span>
+        <span>password: any</span>
       </div>
-
     </el-form>
   </div>
 </template>
 
 <script>
-import path from 'path'
-import { validUsername } from '@/utils/validate'
-import { deepClone } from '@/utils'
+import path from "path";
+import { validUsername } from "@/utils/validate";
+import { deepClone } from "@/utils";
 
 export default {
-  name: 'Login',
+  name: "Login",
   data() {
     const validateUsername = (rule, value, callback) => {
       if (!validUsername(value)) {
-        callback(new Error('Please enter the correct user name'))
+        callback(new Error("Please enter the correct user name"));
       } else {
-        callback()
+        callback();
       }
-    }
+    };
     const validatePassword = (rule, value, callback) => {
       if (value.length < 6) {
-        callback(new Error('The password can not be less than 6 digits'))
+        callback(new Error("The password can not be less than 6 digits"));
       } else {
-        callback()
+        callback();
       }
-    }
+    };
     return {
       loginForm: {
-        username: 'admin',
-        password: '111111'
+        username: "admin",
+        password: "111111"
       },
       loginRules: {
-        username: [{ required: true, trigger: 'blur', validator: validateUsername }],
-        password: [{ required: true, trigger: 'blur', validator: validatePassword }]
+        username: [
+          { required: true, trigger: "blur", validator: validateUsername }
+        ],
+        password: [
+          { required: true, trigger: "blur", validator: validatePassword }
+        ]
       },
       loading: false,
-      passwordType: 'password',
+      passwordType: "password",
       redirect: undefined,
 
       roleAuth: [
         {
-          path: '/dashboard',
-          title: '首页',
+          path: "/dashboard",
+          title: "首页",
           btnRoles: []
         },
         {
-          path: '/form/index',
+          path: "/form/index",
           btnRoles: [],
-          title: 'Forms',
-          children: [
-            {
-              path: '/form/index',
-              title: 'Form',
-              roles: ['edit', 'det'],
-              btnRoles: ['edit', 'det']
-            }
-          ]
+          title: "Forms"
         },
         {
-          path: '/nested',
-          title: 'Nested',
-          btnRoles: [],
-          children: [
-            {
-              path: '/nested/menu1',
-              title: 'Menu1',
-              child: 'true',
-              roles: ['edit', 'det'],
-              btnRoles: ['edit', 'det']
-              // children: [
-              //   {
-              //     path: '/nested/menu1/menu1-1/index',
-              //     title: 'Menu1-1',
-              //     roles: ['edit', 'det'],
-              //     btnRoles: ['edit', 'det']
-              //   },
-              //   {
-              //     path: '/nested/menu1/menu1-2/index',
-              //     title: 'Menu1-2',
-              //     roles: ['edit', 'det'],
-              //     btnRoles: ['edit', 'det']
-              //   },
-              //   {
-              //     path: '/nested/menu1/menu1-3/index',
-              //     title: 'Menu1-3',
-              //     roles: ['edit', 'det'],
-              //     btnRoles: ['edit', 'det']
-              //   }
-              // ]
-            },
-            {
-              path: '/nested/menu2',
-              title: 'Menu2',
-              child: 'true',
-              roles: ['edit', 'det'],
-              btnRoles: ['edit', 'det']
-            }
-          ]
+          path: "/nested",
+          title: "Nested",
+          btnRoles: []
+        },
+        {
+          path: "/nested/menu1",
+          title: "Menu1",
+          child: "true",
+          roles: ["edit", "det"],
+          btnRoles: ["edit", "det"]
+        },
+        {
+          path: "/nested/menu2",
+          title: "Menu2",
+          child: "true",
+          roles: ["edit", "det"],
+          btnRoles: ["edit", "det"]
+        },
+        {
+          path: "/menu1/menu1-1",
+          title: "Menu1-1",
+          roles: ["edit", "det"],
+          btnRoles: ["edit", "det"]
+        },
+        {
+          path: "/menu1/menu1-2",
+          title: "Menu1-2",
+          roles: ["edit", "det"],
+          btnRoles: ["edit", "det"]
+        },
+        {
+          path: "/menu1/menu1-3",
+          title: "Menu1-3",
+          roles: ["edit", "det"],
+          btnRoles: ["edit", "det"]
         }
       ]
-    }
+    };
   },
   watch: {
     $route: {
       handler: function(route) {
-        this.redirect = route.query && route.query.redirect
+        this.redirect = route.query && route.query.redirect;
       },
       immediate: true
     }
@@ -163,46 +165,54 @@ export default {
   },
   methods: {
     showPwd() {
-      if (this.passwordType === 'password') {
-        this.passwordType = ''
+      if (this.passwordType === "password") {
+        this.passwordType = "";
       } else {
-        this.passwordType = 'password'
+        this.passwordType = "password";
       }
       this.$nextTick(() => {
-        this.$refs.password.focus()
-      })
+        this.$refs.password.focus();
+      });
     },
     handleLogin() {
       this.$refs.loginForm.validate(valid => {
         if (valid) {
-          this.loading = true
-          console.log(this.roleAuth)
-          this.$wsCache.set('userInfo', { roleAuth: this.roleAuth })
-          this.$store.dispatch('GenerateRoutes').then(() => {
-            // this.$router.push({ path: this.redirect || '/' }) // 后面开发记得打开
-            this.$router.options.routes = this.$store.getters.routers
-            this.$router.addRoutes(this.$store.getters.addRouters) // 动态添加可访问路由
-            this.$router.push({ path: path.resolve(this.$store.getters.addRouters[0].path, this.$store.getters.addRoutes[0].children[0].path) })
-            this.loading = false
-          }).catch(() => {
-            this.loading = false
-          })
+          this.loading = true;
+          console.log(this.roleAuth);
+          this.$wsCache.set("userInfo", { roleAuth: this.roleAuth });
+          this.$store
+            .dispatch("GenerateRoutes")
+            .then(() => {
+              this.$router.push({ path: this.redirect || "/" }); // 后面开发记得打开
+              this.$router.options.routes = this.$store.getters.routers;
+              this.$router.addRoutes(this.$store.getters.addRouters); // 动态添加可访问路由
+              this.$router.push({
+                path: path.resolve(
+                  this.$store.getters.addRouters[0].path,
+                  this.$store.getters.addRoutes[0].children[0].path
+                )
+              });
+              this.loading = false;
+            })
+            .catch(() => {
+              this.loading = false;
+            });
         } else {
-          console.log('error submit!!')
-          return false
+          console.log("error submit!!");
+          return false;
         }
-      })
+      });
     }
   }
-}
+};
 </script>
 
 <style lang="scss">
 /* 修复input 背景不协调 和光标变色 */
 /* Detail see https://github.com/PanJiaChen/vue-element-admin/pull/927 */
 
-$bg:#283443;
-$light_gray:#fff;
+$bg: #283443;
+$light_gray: #fff;
 $cursor: #fff;
 
 @supports (-webkit-mask: none) and (not (cater-color: $cursor)) {
@@ -245,9 +255,9 @@ $cursor: #fff;
 </style>
 
 <style lang="scss" scoped>
-$bg:#2d3a4b;
-$dark_gray:#889aa4;
-$light_gray:#eee;
+$bg: #2d3a4b;
+$dark_gray: #889aa4;
+$light_gray: #eee;
 
 .login-container {
   min-height: 100%;
